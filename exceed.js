@@ -1,16 +1,17 @@
 const Discord = require("discord.js");
 const client = new Discord.Client();
+const config = require("./config.json");
  
 client.on("ready", () => {
   console.log("I am ready!");
 });
  
 client.on("message", (message) => {
-  if (message.author.bot) return;
+  if (!message.content.startsWith(prefix) || message.author.bot) return; //prevent bots from talking to themselves in a loop
+  
   if (message.isMentioned(client.user)){
-          let res = message.content.split(" ");
-          res.shift()
-      switch(res[0].toLowerCase()){
+      let res = message.content.split(" ");
+      switch(res[0].toLowerCase().slice(1)){
         case "search":
         res.shift()
                 message.channel.send(message.author.username+"-sama, I have retrieved the information for you.")
@@ -31,7 +32,7 @@ client.on("message", (message) => {
         
         case "et":
                 message.channel.send(message.author.username+"-sama, please use this link.")
-	        message.channel.send("http://www.roguard.net/game/endless-tower/")
+				message.channel.send("http://www.roguard.net/game/endless-tower/")
         break;
         
         case "joke":
@@ -48,18 +49,17 @@ client.on("message", (message) => {
         
         case "help":
         default:
-        message.channel.send("I am the Exceed Butler.")
+        message.channel.send("I am the Exceed Maid.")
         message.channel.send("Available commands: search <item>, vh40, vh60, et")
         break;
     
       }
   }
 });
- 
-client.login("NTI1NTc4ODg2NjEyNzc5MDA4.Dv4rkA.gPehAJoTtEM_wCjHfSs3yndZL90");
 
+client.login(config.token);
 client.on("disconnect", (event) => {
 	client.channels[0].send("Masters, I am taking a break after "+ client.uptime/(100*60) + " minutes. I will take my leave.")
 	client.channels[0].send("Wait! I still have things to do... trying to come back...")
-	client.login()
+	client.login(config.token);
 })
