@@ -56,5 +56,10 @@ client.on("message", (message) => {
   }
 });
  
-client.login("");
-client.destroy().then(() => client.login())
+client.login("NTI1NTc4ODg2NjEyNzc5MDA4.Dv4rkA.gPehAJoTtEM_wCjHfSs3yndZL90");
+
+client.on("disconnect", (event) => {
+	client.channels[0].send("Masters, I am taking a break after "+ client.uptime/(100*60) + " minutes. I will take my leave.")
+	client.channels[0].send("Wait! I still have things to do... trying to come back...")
+	client.login()
+})
