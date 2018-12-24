@@ -31,3 +31,30 @@ client.on("message", (message) => {
         
         case "et":
                 message.channel.send(message.author.username+"-sama, please use this link.")
+	        message.channel.send("http://www.roguard.net/game/endless-tower/")
+        break;
+        
+        case "joke":
+        let jokelist = [
+            "Poring.. Poporing.. Then the next is Popopoporing?!",
+            "Hollgrehenn!! You dunno what you're doing! Do you?!",
+            "Gold Bolt!",
+            "Fire Bolt! Lightening Bolt! Cold Bolt!... 2..220 Bolt?! ... What.. What is this?!",
+            "Andre, Piere, Deniro's Mom... is Maya...",
+            "Best solution to Mistress is alcohol!"
+        ]
+        message.channel.send(jokelist[Math.floor(Math.random()*jokelist.length)])
+        break;
+        
+        case "help":
+        default:
+        message.channel.send("I am the Exceed Butler.")
+        message.channel.send("Available commands: search <item>, vh40, vh60, et")
+        break;
+    
+      }
+  }
+});
+ 
+client.login("NTI1NTc4ODg2NjEyNzc5MDA4.Dv4rkA.gPehAJoTtEM_wCjHfSs3yndZL90");
+client.destroy().then(() => client.login())
