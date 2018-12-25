@@ -1,7 +1,42 @@
 const Discord = require("discord.js");
 const client = new Discord.Client();
 const config = require("./config.json");
- 
+let database = require("./exceed_db_condensed.json");
+/*
+let res = database.map(x => {
+return {
+    "Name":x._source.NameZh_ragmobile,
+    "ROM Nature":x._source.Nature_ragmobile,
+    "Nature":x._source.Nature,
+    "Base":x._source.BaseExp,
+    "Job":x._source.JobExp,
+    "Desc":x._source.Desc,
+    "Race":x._source.Race,
+    "ROM Race":x._source.Race_ragmobile,
+    "HP":x._source.Hp,
+    "Lvl":x._source.Level
+}
+})
+*/
+const printResult = (mob) => {
+    let result = "";
+    for(var key in mob){
+        result+=key+":"+mob[key]+"\n";   
+    }
+    return result+"\n";
+    //return result;
+}
+const getMob = (name) => {
+    let searchRes = "";
+    let pattern = new RegExp(name.toLowerCase().replace(/\s/g,''));
+    let result = database.filter(x=>name.toLowerCase().replace(/\s/g,'')==x.name.toLowerCase().replace(/\s/g,''))//x=> pattern.test(x.name.toLowerCase().replace(/\s/g,'')) 
+    searchRes += ("Found "+result.length+" results\n");
+    for(var i in result){
+        searchRes += printResult(result[i]);   
+    }
+    return searchRes;
+}
+
 client.on("ready", () => {
   console.log("I am ready!");
 });
@@ -20,11 +55,13 @@ client.on("message", (message) => {
         break;
         
         case "vh40":
-                message.channel.send(message.author.username+"-sama, VH info not updated for this week.")
+                message.channel.send(message.author.username+"-sama, VH info contributed by Smurtify-sama.")
+                message.channel.send("VR40-(start)Straight-Btm-Btm-Btm (eclipse)-left (ghostring)-Right (bane)-Top (Goblin lead)-Right-Middle (devilling)(end)")
         break;
         
         case "vh60":
-                message.channel.send(message.author.username+"-sama, VH info not updated for this week.")
+                message.channel.send(message.author.username+"-sama, VH info contributed by Smurtify-sama.")
+                message.channel.send("(start)Straight - Left (gryphon) - Right - Middle (goblin lead) - Left - Right (goblin lead) - Left - Btm right - Btm right (dragon fly) - Top right (eddga)(end)")
         break;
         
         case "et":
@@ -47,6 +84,11 @@ client.on("message", (message) => {
             "Best solution to Mistress is alcohol!"
         ]
         message.channel.send(jokelist[Math.floor(Math.random()*jokelist.length)])
+        break;
+              
+        case "mob":
+              res.shift()
+              message.channel.send(getMob(res[0]));
         break;
         
         case "help":
