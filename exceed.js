@@ -5,11 +5,12 @@ const config = require("./config.json");
 client.on("ready", () => {
   console.log("I am ready!");
 });
- 
+
+let channel = null;
 client.on("message", (message) => {
-  if (!message.content.startsWith(prefix) || message.author.bot) return; //prevent bots from talking to themselves in a loop
+    channel = message.channel;
+  if (!message.content.startsWith(config.prefix) || message.author.bot) return; //prevent bots from talking to themselves in a loop
   
-  if (message.isMentioned(client.user)){
       let res = message.content.split(" ");
       switch(res[0].toLowerCase().slice(1)){
         case "search":
@@ -19,20 +20,21 @@ client.on("message", (message) => {
         break;
         
         case "vh40":
-                message.channel.send(message.author.username+"-sama, here is the info you requested.")
-                message.channel.send("VH40 WK 17th DEC by Idaliae")
-        message.channel.send("straight-top right-top right (?)-btm right-up-down-tl(dragonfly)-right (?)-down-straight-left(Drake)");
+                message.channel.send(message.author.username+"-sama, VH info not updated for this week.")
         break;
         
         case "vh60":
-                message.channel.send(message.author.username+"-sama, here is the info you requested.")
-                message.channel.send("VH60 WK 17th DEC by Idaliae")
-        message.channel.send("straight-left-left-ctr(eddga)-left-left-tl(maya)-tr(maya)-bl-left(gob lead)-right(gob lead)");
+                message.channel.send(message.author.username+"-sama, VH info not updated for this week.")
         break;
         
         case "et":
                 message.channel.send(message.author.username+"-sama, please use this link.")
 				message.channel.send("http://www.roguard.net/game/endless-tower/")
+        break;
+        
+        case "nod":
+                message.channel.send(message.author.username+"-sama, please return back safely.")
+				message.channel.send("https://www.reddit.com/r/RagnarokMobile/comments/9zb3jl/guide_night_of_destruction/")
         break;
         
         case "joke":
@@ -50,16 +52,16 @@ client.on("message", (message) => {
         case "help":
         default:
         message.channel.send("I am the Exceed Maid.")
-        message.channel.send("Available commands: search <item>, vh40, vh60, et")
+        message.channel.send("Available commands: search <item>, vh40, vh60, et, nod, joke")
         break;
     
       }
-  }
+  
 });
 
 client.login(config.token);
 client.on("disconnect", (event) => {
-	client.channels[0].send("Masters, I am taking a break after "+ client.uptime/(100*60) + " minutes. I will take my leave.")
-	client.channels[0].send("Wait! I still have things to do... trying to come back...")
+	channel.send("Masters, I am taking a break after "+ client.uptime/(100*60) + " minutes. I will take my leave.")
+	channel.send("Wait! I still have things to do... trying to come back...")
 	client.login(config.token);
 })
