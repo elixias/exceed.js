@@ -3,6 +3,7 @@ const client = new Discord.Client();
 const config = require("./config.json");
 const joke = require("./joke.json");
 let database = require("./exceed_db_condensed.json");
+
 const printResult = (mob) => {
     let result = "";
     for(var key in mob){
@@ -20,14 +21,15 @@ const getMob = (name) => {
     }
     return searchRes;
 }
+
 client.on("ready", () => {
   console.log("I am ready!");
 });
+
 let channel = null;
 client.on("message", (message) => {
     channel = message.channel;
-  if (!message.content.startsWith(config.prefix) || message.author.bot) return; 
- 
+  if (!message.content.startsWith(config.prefix) || message.author.bot) return; //prevent bots from talking to themselves in a loop
       let res = message.content.split(" ");
       switch(res[0].toLowerCase().slice(1)){
         case "search":
@@ -47,13 +49,16 @@ client.on("message", (message) => {
                 message.channel.send(message.author.username+"-sama, please use this link.")
 				message.channel.send("http://www.roguard.net/game/endless-tower/")
         break;
+
         case "nod":
                 message.channel.send(message.author.username+"-sama, please return back safely.")
 				message.channel.send("https://www.reddit.com/r/RagnarokMobile/comments/9zb3jl/guide_night_of_destruction/")
         break;
+
         case "joke":
 			message.channel.send(jokelist[Math.floor(Math.random()*joke.length)])
         break;
+		
         case "mob":
               res.shift()
               message.channel.send(getMob(res.join("")));
@@ -69,8 +74,10 @@ client.on("message", (message) => {
         message.channel.send("Available commands: search <item>, vh40, vh60, et, nod, joke, mob <mob name>, time")
         break;
       }
+
 });
 client.login(config.token);
+
 client.on("error", (event) => {
 	console.log(client.uptime/(100*60) + " minutes uptime")
 	client.destroy().then(()=>{
@@ -79,20 +86,3 @@ client.on("error", (event) => {
 	})
 });
 
-/*
-let res = database.map(x => {
-return {
-    "Name":x._source.NameZh_ragmobile,
-    "ROM Nature":x._source.Nature_ragmobile,
-    "Nature":x._source.Nature,
-    "Base":x._source.BaseExp,
-    "Job":x._source.JobExp,
-    "Desc":x._source.Desc,
-    "Race":x._source.Race,
-    "ROM Race":x._source.Race_ragmobile,
-    "HP":x._source.Hp,
-    "Lvl":x._source.Level
-}
-})
-*/
-//x=> pattern.test(x.name.toLowerCase().replace(/\s/g,'')) 
