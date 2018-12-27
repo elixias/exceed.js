@@ -1,9 +1,10 @@
 const Discord = require("discord.js");
-const client = new Discord.Client();
+let client = new Discord.Client();
 const config = require("./config.json");
 const joke = require("./joke.json");
 let database = require("./exceed_db_condensed.json");
-
+let Gacha = require("./gacha.js")
+let gacha = new Gacha();
 const printResult = (mob) => {
     let result = "";
     for(var key in mob){
@@ -21,15 +22,14 @@ const getMob = (name) => {
     }
     return searchRes;
 }
-
 client.on("ready", () => {
   console.log("I am ready!");
 });
-
 let channel = null;
 client.on("message", (message) => {
     channel = message.channel;
-  if (!message.content.startsWith(config.prefix) || message.author.bot) return; //prevent bots from talking to themselves in a loop
+  if (!message.content.startsWith(config.prefix) || message.author.bot) return; 
+ 
       let res = message.content.split(" ");
       switch(res[0].toLowerCase().slice(1)){
         case "search":
@@ -39,7 +39,7 @@ client.on("message", (message) => {
         break;
         case "vh40":
                 message.channel.send(message.author.username+"-sama, VH info contributed by Smurtify-sama.")
-                message.channel.send("VR40-(start)Straight-Btm-Btm-Btm (eclipse)-left (ghostring)-Right (bane)-Top (Goblin lead)-Right-Middle (devilling)(end)")
+                message.channel.send("VR40-(start)Straight-Btm-Btm-Btm (eclipse)-left (ghostring)-Right (Drake)-Top (Goblin lead)-Right-Middle (devilling)(end)")
         break;
         case "vh60":
                 message.channel.send(message.author.username+"-sama, VH info contributed by Smurtify-sama.")
@@ -47,42 +47,43 @@ client.on("message", (message) => {
         break;
         case "et":
                 message.channel.send(message.author.username+"-sama, please use this link.")
-				message.channel.send("http://www.roguard.net/game/endless-tower/")
+                                message.channel.send("http://www.roguard.net/game/endless-tower/")
         break;
-
         case "nod":
                 message.channel.send(message.author.username+"-sama, please return back safely.")
-				message.channel.send("https://www.reddit.com/r/RagnarokMobile/comments/9zb3jl/guide_night_of_destruction/")
+                                message.channel.send("https://www.reddit.com/r/RagnarokMobile/comments/9zb3jl/guide_night_of_destruction/")
         break;
-
         case "joke":
-			message.channel.send(jokelist[Math.floor(Math.random()*joke.length)])
+                message.channel.send(joke[Math.floor(Math.random()*joke.length)])
         break;
-		
         case "mob":
               res.shift()
               message.channel.send(getMob(res.join("")));
         break;
-		case "time":
-			var moment = require('moment');
-			var now = moment().add(-1,'h').format('H:mmA (DD/MM/YYYY)')
-			message.channel.send(message.author.username+"-sama, server time now is "+now);
-		break;
+        case "time":
+                var moment = require('moment');
+                var now = moment().add(7,'h').format('H:mmA (DD/MM/YYYY)')
+                message.channel.send(message.author.username+"-sama, server time now is "+now);
+        break;
+		case "gacha":
+			res.shift()
+			message.channel.send(gacha.insertCoin(res[0]))
+        break;
+		case "buyxmasblessingbox":
+			message.channel.send(gacha.buyXMasBox())
+        break;
         case "help":
         default:
         message.channel.send("I am the Exceed Maid.")
-        message.channel.send("Available commands: search <item>, vh40, vh60, et, nod, joke, mob <mob name>, time")
+        message.channel.send("Available commands: search <item>, vh40, vh60, et, nod, joke, mob <name>,time,gacha <tries>,buyxmasblessingbox")
         break;
       }
-
 });
 client.login(config.token);
-
 client.on("error", (event) => {
-	console.log(client.uptime/(100*60) + " minutes uptime")
-	client.destroy().then(()=>{
-		client = new Discord.Client();
-	client.login(config.token);
-	})
+        console.log(client.uptime/(100*60) + " minutes uptime")
+        client.destroy().then(()=>{
+                client = new Discord.Client();
+        client.login(config.token);
+        })
 });
-
