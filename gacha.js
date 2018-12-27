@@ -36,6 +36,7 @@ class Gacha {
 	insertCoin(numTries){
 		if(isNaN(numTries))	return "Please choose a proper number!";
 		let allRolls = "";
+		if(numTries>100){ numtries=100; allRolls+="Setting max tries to 100~";}
 		for(var tries=0;tries<numTries;tries++){
 			let randno = Math.random() * 100;
 			allRolls += ("1 x "+this.gachaForItem(randno)+", ");
